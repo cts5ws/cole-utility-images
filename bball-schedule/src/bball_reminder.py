@@ -67,7 +67,7 @@ def format_message(new_dates):
 	return "Boerum Hill IndoorHoops Session(s) Added: ({})".format(','.join(new_dates))
 
 def send_message(dates):
-	client = boto3.client('sns', aws_access_key_id=key_id,aws_secret_access_key=secret)
+	client = boto3.client('sns', region_name="us-east-1", aws_access_key_id=key_id,aws_secret_access_key=secret)
 
 	for number in phone_numbers:
 		print("Sending message to {}".format(str(number)))
