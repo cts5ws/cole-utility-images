@@ -1,0 +1,15 @@
+version: '3'
+services:
+  webserver:
+    build: ./web-apps/
+    restart: always
+  bball_cron:
+    build: ./bball-schedule/
+    env_file:
+    - ./bball-schedule/etc/config.env
+    restart: always
+  reverse_proxy:
+    build: ./reverse-proxy/
+    ports:
+      - "80:80"
+    restart: always

@@ -1,0 +1,3 @@
+# */1 * * * * /usr/bin/python3 /home/pi/bball_reminder/bball_reminder.py 2>&1 > /var/log/bball_reminder/reminder.log
+
+*/1 * * * * python3 /usr/share/bball_reminder/bball_reminder.py > /proc/1/fd/1 2>/proc/1/fd/2

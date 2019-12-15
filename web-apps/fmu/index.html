@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+<style type="text/css">
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-container > div, p {
+  background-color: #f1f1f1;
+  width: 300px;
+  margin: 10px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+}
+.form-field {
+	text-align: center
+}
+</style>
+<div id="top-level-div">
+
+	<div id="title-div" class="flex-container">
+		<h3>Alcohol Percentage Value Calculator</h3>
+	</div>
+
+	<div id="input-div" class="flex-container">
+		<div id="field-div">
+
+			<div id="beer1" class="flex-container">
+				1) Name: <input type="text" id="name1" class="form-field">
+				Ounces: <input type="text" id="volume1" class="form-field">
+				Percent: <input type="text" id="percent1" class="form-field">
+				Price: $<input type="text" id="price1" class="form-field"><br><br>
+			</div>
+
+		</div>
+
+		<div id="button-div">
+			<input type="button" onclick="processInput()" value="Submit">
+			<input type="button" id="newBeerButton" onclick="addBeerInput()" value="New Beer">
+		</div>
+	</div>
+
+	<div id="output-div" class="flex-container"></div>
+</div>
+
+<script>
+
+	var beerInputTemplate = "{0}) Name: <input type=\"text\" id=\"name{1}\" class=\"form-field\"> Ounces: <input type=\"text\" id=\"volume{2}\" class=\"form-field\"> Percent: <input type=\"text\" id=\"percent{3}\" class=\"form-field\"> Price: $<input type=\"text\" id=\"price{4}\" class=\"form-field\"><br><br>"
+	var totalBeers = 1;
+
+	function processInput() {
+
+		var entries = []
+
+		for(i = 1; i <= totalBeers; i++){
+
+			var name = document.getElementById("name" + i).value;
+			var volume = document.getElementById("volume" + i).value;
+			var percent = document.getElementById("percent" + i).value;
+			var price = document.getElementById("price" + i).value;
+
+			// input validation
+			if(!name || !volume || !percent || !price){
+				alert("Error: input field cannot be blank");
+				return;
+			}
+
+			if(isNaN(volume) || isNaN(percent) || isNaN(price)){
+				alert("Error: volume, percent, and price fields must be valid numbers")
+				return;
+			}
+
+			var pricePerAlcoholOz = price / (percent * volume / 100);
+
+			var inputEntry = {name: name, volume: volume, percent: percent, price: price, pricePerAlcoholOz: pricePerAlcoholOz}
+
+			entries.push(inputEntry)
+		}
+
+		// sort
+		entries.sort(function(a, b) {
+    		return parseFloat(a.pricePerAlcoholOz) - parseFloat(b.pricePerAlcoholOz);
+		});
+
+		document.getElementById("output-div").innerHTML = "<h4>Price per Ounce of Alcohol</h4>";
+
+		// write output
+		entries.forEach(item => {
+			var newOutput = document.createElement('p');
+			newOutput.innerHTML = item.name + ": $" + item.pricePerAlcoholOz.toFixed(2);
+
+			document.getElementById("output-div").appendChild(newOutput);
+		})
+	}
+
+	function addBeerInput() {
+		totalBeers += 1;
+
+		var newInput = document.createElement('div'); // is a node
+		newInput.id = "beer" + totalBeers;
+		newInput.className = "flex-container"
+		newInput.innerHTML = String.format(beerInputTemplate, totalBeers, totalBeers, totalBeers, totalBeers, totalBeers);
+
+		document.getElementById("field-div").appendChild(newInput);
+
+
+	}
+
+	String.format = function() {
+      var s = arguments[0];
+      for (var i = 0; i < arguments.length - 1; i++) {       
+          var reg = new RegExp("\\{" + i + "\\}", "gm");             
+          s = s.replace(reg, arguments[i + 1]);
+      }
+      return s;
+  }
+</script>
+
+</body>
+</html>
