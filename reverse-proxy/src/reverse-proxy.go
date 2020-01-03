@@ -6,24 +6,27 @@ import (
     "net/http/httputil"
     "net/url"
 )
-// ToDo:
-// - add better logging
-// - do implement rate limiting
+
+var protocol = "http"
+var downstreamUrl = "webserver"
+var port = 80
+
+var downstreamBaseUrlRaw = fmt.Sprintf("%s://%s:%d", protocol, downstreamUrl, port)
 
 func routeToLocalPort(res http.ResponseWriter, req *http.Request) {
 
-    url, _ := url.Parse("http://webserver:80")
+    fmt.Printf("Proxying to %s from %s \n", req.URL.Path, req.RemoteAddr)
+
+    downstreamBaseUrl, _ := url.Parse(downstreamBaseUrlRaw)
 
     // create the reverse proxy
-    proxy := httputil.NewSingleHostReverseProxy(url)
+    proxy := httputil.NewSingleHostReverseProxy(downstreamBaseUrl)
 
     // Update the headers to allow for SSL redirection
-    req.URL.Host = url.Host
-    req.URL.Scheme = url.Scheme
+    req.URL.Host = downstreamBaseUrl.Host
+    req.URL.Scheme = downstreamBaseUrl.Scheme
     req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-    req.Host = url.Host
-
-    fmt.Println("Proxying to webserver")
+    req.Host = downstreamBaseUrl.Host
 
     proxy.ServeHTTP(res, req)
 }
