@@ -17,7 +17,7 @@ var downstreamBaseUrlRaw = fmt.Sprintf("%s://%s:%d", protocol, downstreamUrl, po
 func routeToLocalPort(res http.ResponseWriter, req *http.Request) {
 
     proxyIp := strings.Split(req.RemoteAddr, ":")[0]
-    originIp := req.Header.Get("'X-Forwarded-For")
+    originIp := req.Header.Get("X-Forwarded-For")
     if originIp == "" {
         originIp = "n/a"
     }
