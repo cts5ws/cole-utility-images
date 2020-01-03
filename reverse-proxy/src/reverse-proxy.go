@@ -5,6 +5,7 @@ import (
     "net/http"
     "net/http/httputil"
     "net/url"
+    "strings"
 )
 
 var protocol = "http"
@@ -15,7 +16,13 @@ var downstreamBaseUrlRaw = fmt.Sprintf("%s://%s:%d", protocol, downstreamUrl, po
 
 func routeToLocalPort(res http.ResponseWriter, req *http.Request) {
 
-    fmt.Printf("Proxying to %s from %s \n", req.URL.Path, req.RemoteAddr)
+    proxyIp := strings.Split(req.RemoteAddr, ":")[0]
+    originIp := req.Header.Get("'X-Forwarded-For")
+    if originIp == "" {
+        originIp = "n/a"
+    }
+
+    fmt.Printf("Proxying to %s from (%s origin: %s) \n", req.URL.Path, proxyIp, originIp)
 
     downstreamBaseUrl, _ := url.Parse(downstreamBaseUrlRaw)
 
