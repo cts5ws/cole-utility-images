@@ -1,9 +1,7 @@
 FROM golang:alpine
 
-WORKDIR /usr/share/reverse_proxy
+WORKDIR /usr/share/reverse-proxy
 
-COPY src/reverse-proxy.go .
+COPY src/ ./src
 
-RUN go build
-
-CMD ["./reverse_proxy"]
+CMD ["go", "run", "github.com/cts5ws/server"]
