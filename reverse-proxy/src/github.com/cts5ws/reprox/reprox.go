@@ -2,12 +2,12 @@ package reprox
 
 import (
 	"fmt"
+	"github.com/cts5ws/ratelim"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
-	"github.com/cts5ws/ratelim"
 )
 
 var protocol = "http"
@@ -25,7 +25,7 @@ func Route(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Enhance your calm bro", 420)
 	} else {
 		fmt.Printf("Proxying to %s from (%s origin: %s) \n", req.URL.Path, proxyIp, originIp)
-		forwardRequestDownstream(res,req)
+		forwardRequestDownstream(res, req)
 	}
 }
 
