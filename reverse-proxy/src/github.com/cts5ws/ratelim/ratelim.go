@@ -9,6 +9,7 @@ var requestWaitTime, _ = time.ParseDuration("10s")
 
 var ipAddrToLastRequest = make(map[string]time.Time)
 
+// todo: lock map access. might not be thread safe
 func ShouldRateLimit(ip net.IP) bool {
 
 	currentTime := time.Now()
