@@ -14,7 +14,7 @@ var ipAddrToLastRequest = make(map[string]time.Time)
 func ShouldRateLimit(ip net.IP) bool {
 
 	if !ratelimEnable {
-		return false;
+		return false
 	}
 
 	currentTime := time.Now()
